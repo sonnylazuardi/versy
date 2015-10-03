@@ -1,10 +1,51 @@
 angular.module('starter.controllers', [])
 
+.factory("Auth", function($firebaseAuth, FBURL) {
+  var ref = new Firebase(FBURL);
+  return $firebaseAuth(ref);
+})
+
+.service('AuthHelper', function() {
+  var self = this;
+  self.getName = function (authData) {
+    if (!authData) return;
+    switch(authData.provider) {
+      case 'facebook':
+        return authData.facebook.displayName;
+    }
+  };
+  self.getPicture = function (authData) {
+    if (!authData) return;
+    switch(authData.provider) {
+      case 'facebook':
+        return authData.facebook.cachedUserProfile.picture.data.url;
+    }
+  }
+  return self;
+})
+
+
 .controller('DashCtrl', function($scope) {})
 
 .controller('BrowseCtrl', function($scope) {
   
 
+})
+
+.controller('LoginCtrl', function($scope, $state,FBURL) {
+  $scope.facebook = function() {
+    var ref = new Firebase(FBURL);
+    ref.authWithOAuthPopup("facebook", function(error, authData) {
+      if (error) {
+        console.log("Login Failed!", error);
+      } else {
+        console.log("Authenticated successfully with payload:", authData);
+      }
+    },{
+        scope:"public_profile, email, user_friends"
+    });
+    $state.go('tab.create');
+  }
 })
 
 .controller('TimelineCtrl', function($scope, $stateParams) {
