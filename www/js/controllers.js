@@ -7,12 +7,14 @@ angular.module('starter.controllers', [])
 
 .controller('DashCtrl', function($scope) {})
 
-.controller('BrowseCtrl', function($scope) {
-   $scope.cards = [
-        { image: 'https://pbs.twimg.com/profile_images/546942133496995840/k7JAxvgq.jpeg' },
-        { image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png' },
-        { image: 'https://pbs.twimg.com/profile_images/491995398135767040/ie2Z_V6e.jpeg' },
-    ];
+.controller('BrowseCtrl', function($scope,FBURL) {
+    var ref = new Firebase(FBURL+"/images/");
+        ref.on("value", function(snapshot) { //async
+            console.log(snapshot.val());
+            $scope.images=snapshot.val();
+        }, function (errorObject) {
+            console.log("The read failed: " + errorObject.code);
+        });
 
 })
 
@@ -23,6 +25,7 @@ angular.module('starter.controllers', [])
       if (error) {
         console.log("Login Failed!", error);
       } else {
+        localStorage.setItem("authData",JSON.stringify(authData));
         console.log("Authenticated successfully with payload:", authData);
         ref.child("users").child(authData.uid).set({
             id:authData.uid,
@@ -60,6 +63,7 @@ angular.module('starter.controllers', [])
           if (error) {
             console.log("Login Failed!", error);
           } else {
+            localStorage.setItem("authData",JSON.stringify(authData));
             console.log("Authenticated successfully with payload:", authData);
              $state.go('tab.create');
           }
@@ -80,10 +84,33 @@ angular.module('starter.controllers', [])
 .controller('DetailCtrl', function($scope, $stateParams,$http,FBURL) {
     var ref = new Firebase(FBURL+"/images/"+$stateParams.id);
     ref.on("value", function(snapshot) { //async
-      $scope.devo =snapshot.val();                 
+      $scope.devo =snapshot.val();
     }, function (errorObject) {
       console.log("The read failed: " + errorObject.code);
     });
+    
+    $scope.comment = function(cText,image_id) {
+        var authData=JSON.parse(localStorage.getItem("authData"));
+        var comment = {
+                text: cText,
+         };
+         console.log(authData.provider);
+         if (authData.provider=="facebook"){
+            comment.user_name=authData.facebook.displayName;
+            comment.user_pp=authData.facebook.cachedUserProfile.picture.data.url;
+         }
+         else{
+            comment.user_name="dummyUse";
+            comment.user_pp="dummy.png";
+         }
+        $http({
+            url:"https://versy.firebaseio.com/images/"+image_id+"/comments.json",
+            method:'POST',
+            data:comment,
+            headers:{'Content-Type':'application/json','X-Requested-With': 'XMLHttpRequest'}
+        }).success(function (res) {})
+        .error(function (reponse) {});
+    };
     /*$http({
             url:'http://versy.firebaseio.com/images/1',
             method:'GET',
