@@ -5,6 +5,11 @@
     <ion-content>
       <div class="row unlimited-items bg-images">
         <div class="col">
+          <a href ng-click="actions.captureImage()">
+            <img src="img/bg/cameracapture.jpg" />
+          </a>
+        </div>
+        <div class="col">
           <a href ng-click="actions.selectBg('img/bg/background.europe.jpg')">
             <img src="img/bg/background.europe.jpg" />
           </a>
@@ -57,7 +62,7 @@
       </div>
 
       <div>
-        <button class="button button-full" ng-click="actions.captureImage()">Capture from Camera</button>
+        <!-- <button class="button button-full" ng-click="actions.captureImage()">Capture from Camera</button> -->
         <button class="button button-full" ng-click="actions.captureLibrary()">Select from Library</button>
         <button class="button button-full button-dangerous" ng-click="closeModal()">Cancel</button>
       </div>

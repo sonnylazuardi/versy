@@ -13,6 +13,7 @@ angular.module('starter', [
   'common.fabric',
   'common.fabric.utilities',
   'common.fabric.constants',
+  'ionic.contrib.ui.tinderCards',
   'ionic-color-picker',
 ])
 
@@ -65,6 +66,16 @@ angular.module('starter', [
       'tab-create': {
         templateUrl: 'templates/tab-create2.html',
         controller: 'Create2Ctrl'
+      }
+    }
+  })
+
+  .state('tab.create3', {
+    url: '/create',
+    views: {
+      'tab-create': {
+        templateUrl: 'templates/tab-create3.html',
+        controller: 'Create3Ctrl'
       }
     }
   })

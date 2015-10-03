@@ -9271,6 +9271,76 @@ a.button {
   -webkit-transition-duration: 0s;
   transition-duration: 0s; }
 
+@font-face {
+  font-family: amsdam;
+  src: url(../fonts/amsdam.ttf) format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-weight: 700; }
+
+@font-face {
+  font-family: aqua;
+  src: url(../fonts/aqua.ttf) format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-weight: 700; }
+
+@font-face {
+  font-family: bebas;
+  src: url(../fonts/bebas.ttf) format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-weight: 700; }
+
+@font-face {
+  font-family: besom;
+  src: url(../fonts/besom.ttf) format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-weight: 700; }
+
+@font-face {
+  font-family: bruss;
+  src: url(../fonts/bruss.ttf) format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-weight: 700; }
+
+@font-face {
+  font-family: cabana;
+  src: url(../fonts/cabana.otf) format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-weight: 700; }
+
+@font-face {
+  font-family: dense;
+  src: url(../fonts/dense.otf) format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-weight: 700; }
+
+@font-face {
+  font-family: refuge;
+  src: url(../fonts/refuge.otf) format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-weight: 700; }
+
+@font-face {
+  font-family: simplifica;
+  src: url(../fonts/simplifica.ttf) format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-weight: 700; }
+
+@font-face {
+  font-family: sunn;
+  src: url(../fonts/sunn.otf) format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-weight: 700; }
+
 .bar.bar-stable {
   background-color: #6CB6B4;
   background-image: linear-gradient(0deg, #b2b2b2, #b2b2b2 50%, transparent 50%);
@@ -9311,3 +9381,72 @@ a.button {
 
 .bg-images img {
   max-width: 100%; }
+
+.list .item.item-accordion {
+  line-height: 38px;
+  padding-top: 0;
+  padding-bottom: 0;
+  transition: 0.09s all linear; }
+
+.list .item.item-accordion.ng-hide {
+  line-height: 0px; }
+
+.list .item.item-accordion.ng-hide-add,
+.list .item.item-accordion.ng-hide-remove {
+  display: block !important; }
+
+td-cards {
+  display: block; }
+
+td-card {
+  display: block; }
+
+td-card img {
+  max-width: 100%;
+  max-height: 100%; }
+
+td-cards {
+  display: block; }
+
+td-card {
+  position: absolute;
+  left: 50%;
+  margin-top: 80px;
+  margin-bottom: 40px;
+  margin-left: -150px;
+  width: 300px;
+  height: 300px;
+  border: 1px solid #999;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+  border-radius: 6px; }
+
+td-card .image {
+  position: relative; }
+
+td-card img {
+  max-width: 100%;
+  border-radius: 6px; }
+
+.yes-text {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 30px;
+  color: #6ffa6f;
+  opacity: 0; }
+
+.no-text {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 30px;
+  color: #ff7373;
+  opacity: 0; }
+
+.fade {
+  -webkit-transition: 0.2s opacity linear;
+  transition: 0.2s opacity linear;
+  opacity: 0; }
+
+button.button {
+  color: #fff !important; }

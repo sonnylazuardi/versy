@@ -1,65 +1,21 @@
 <ion-view view-title="Create a devo">
   <ion-content>
     <div class="list">
-      <label class="item item-input">
+      <label class="item item-input item-stacked-label">
         <span class="input-label">Verses</span>
         <input type="text" ng-model="devo.verse">
       </label>
       <label class="item item-input item-stacked-label">
         <span class="input-label">Content</span>
-        <textarea placeholder="content" ng-model="fabric.selectedObject.text"></textarea>
+        <textarea placeholder="content" ng-model="devo.content"></textarea>
       </label>
-      <label class="item item-input">
-        <span class="input-label">Background Color</span>
-        <button class="button" color-picker="" ng-model="fabric.canvasBackgroundColor" modal-title="Choose a color" color-box="{{testColors.first}}" modal-class="vcc" header-footer-class="bar-positive" ng-click="fabric.setDirty(true); fabric.stopContinuousRendering()">
-          {{ testColors.first || &apos;Choose a color&apos; }} 
-        </button>
-      </label>
-      <label class="item item-input">
-        <span class="input-label">Background Image</span>
-        <button class="button" ng-click="actions.selectImage()">
-          Select Image
-        </button>
-      </label>
-      <label class="item item-input item-select">
-        <div class="input-label">
-          Font
-        </div>
-        <select>
-          <option>Lobster</option>
-          <option>Montserrat</option>
-          <option>Grand Hotel</option>
-        </select>
-      </label>
-      <label class="item item-input">
-        <div class="input-label">
-          Font Color
-        </div>
-        <button class="button" color-picker="" ng-model="fabric.selectedObject.fill" modal-title="Choose a color" color-box="{{testColors.first}}" modal-class="vcc" header-footer-class="bar-positive" ng-click="fabric.setDirty(true); fabric.stopContinuousRendering()">
-          {{ testColors.first || &apos;Choose a color&apos; }} 
-        </button>
-      </label>
-      <div class="item range range-positive">
-        <i class="icon ion-ios-minus-outline"></i>
-        <input type='range' min='.1' max='3' step='.1' ng-change='fabric.setZoom()' ng-model='fabric.canvasScale' />
-        <i class="icon ion-ios-plus-outline"></i>
-      </div>
     </div>
     
-    <div class='image-builder-container'>
-      <div class='image-builder' parent-click="fabric.deactivateAll()">
-          <div class='fabric-container'>
-              <canvas fabric='fabric'></canvas>
-          </div>
-      </div>
-    </div>
-
-    <div>
+    <div class="row">
       <button class="button button-full button-stable" ng-click="next()">
         Next
       </button>
     </div>
-
     
   </ion-content>
 </ion-view>

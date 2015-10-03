@@ -1,32 +1,52 @@
 <ion-view view-title="Create a devo">
   <ion-content>
-    <div class="list">
-      
-      <label class="item item-input item-stacked-label">
-        <span class="input-label">Scripture</span>
-        <textarea placeholder="content" ng-model="devo.scripture"></textarea>
-      </label>
-
-      <label class="item item-input item-stacked-label">
-        <span class="input-label">Observation</span>
-        <textarea placeholder="content" ng-model="devo.observation"></textarea>
-      </label>
-    
-      <label class="item item-input item-stacked-label">
-        <span class="input-label">Application</span>
-        <textarea placeholder="content" ng-model="devo.application"></textarea>
-      </label>
-
-      <label class="item item-input item-stacked-label">
-        <span class="input-label">Prayer</span>
-        <textarea placeholder="content" ng-model="devo.prayer"></textarea>
-      </label>
-      
+    <div class='image-builder-container' style="margin-bottom: 0;">
+      <div class='image-builder' parent-click="fabric.deactivateAll()">
+          <div class='fabric-container'>
+              <canvas fabric='fabric'></canvas>
+          </div>
+      </div>
     </div>
-  
-    <div>
-      <button class="button button-full button-stable" ng-click="save()">
-        Save
+    <div class="list" style="margin-bottom: 0;">
+      <label class="item item-input">
+        <span class="input-label">Background</span>
+        <button class="button" color-picker="" ng-model="fabric.canvasBackgroundColor" modal-title="Choose a color" color-box="{{testColors.first}}" modal-class="vcc" header-footer-class="bar-positive" ng-click="fabric.setDirty(true); fabric.stopContinuousRendering()">
+          <span class="icon ion-paintbucket"></span>
+        </button>&nbsp;
+        <button class="button" ng-click="actions.selectImage()">
+          <span class="icon ion-image"></span>
+        </button>
+      </label>
+      <label class="item item-input item-select">
+        <div class="input-label">
+          Font
+        </div>
+        <button class="button" color-picker="" ng-model="fabric.selectedObject.fill" modal-title="Choose a color" color-box="{{testColors.first}}" modal-class="vcc" header-footer-class="bar-positive" ng-click="fabric.setDirty(true); fabric.stopContinuousRendering()">
+          <span class="icon ion-paintbucket"></span> 
+        </button>
+        <select ng-model="fabric.selectedObject.fontFamily" ng-change="changeFont()">
+          <option>amsdam</option>
+          <option>aqua</option>
+          <option>bebas</option>
+          <option>besom</option>
+          <option>bruss</option>
+          <option>cabana</option>
+          <option>dense</option>
+          <option>refuge</option>
+          <option>simplifica</option>
+          <option>sunn</option>
+        </select>
+      </label>
+      <!-- <div class="item range range-positive">
+        <i class="icon ion-ios-minus-outline"></i>
+        <input type='range' min='.1' max='3' step='.1' ng-change='fabric.setZoom()' ng-model='fabric.canvasScale' />
+        <i class="icon ion-ios-plus-outline"></i>
+      </div> -->
+    </div>
+
+    <div class="row">
+      <button class="button button-full button-stable" ng-click="next()">
+        Next
       </button>
     </div>
   </ion-content>

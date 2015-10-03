@@ -3,7 +3,12 @@ angular.module('starter.controllers', [])
 .controller('DashCtrl', function($scope) {})
 
 .controller('BrowseCtrl', function($scope) {
-  
+    console.log('hello');
+  var cards = [
+        { image: 'https://pbs.twimg.com/profile_images/546942133496995840/k7JAxvgq.jpeg' },
+        { image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png' },
+        { image: 'https://pbs.twimg.com/profile_images/491995398135767040/ie2Z_V6e.jpeg' },
+    ];
 
 })
 
@@ -15,21 +20,7 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('Create2Ctrl', function($scope, $state) {
-    $scope.devo = {
-        verse: 'Psalm 19:1',
-        font: 'Lobster',
-        content: 'The heavens declare \n the glory of God',
-        scripture: 'Psalm 19:1 - The heavens declare the glory of God; and the firmament sheweth his handywork.',
-    };
-
-
-})
-
-.controller('CreateCtrl', function($scope, $stateParams, $state, Fabric, FabricConstants, Keypress, $timeout, $cordovaCamera, $ionicModal, $http) {
-    $scope.fabric = {};
-    $scope.FabricConstants = FabricConstants;
-    $scope.message = '';
+.controller('CreateCtrl', function($scope, $stateParams, $state, Fabric, FabricConstants, Keypress, $timeout, $cordovaCamera, $ionicModal, $http, $q, Devo) {
     $scope.view = {
         loading: false
     };
@@ -40,31 +31,49 @@ angular.module('starter.controllers', [])
         scripture: 'Psalm 19:1 - The heavens declare the glory of God; and the firmament sheweth his handywork.',
     };
 
-    //
-    // Creating Canvas Objects
-    // ================================================================
-    $scope.addShape = function(path) {
-        return $scope.fabric.addShape('img/takut.svg');
+    $scope.next = function() {
+        $scope.save();
+        $state.go('tab.create2');
     };
 
-    $scope.addImage = function(image) {
-        return $scope.fabric.addImage('imgdata.php?url=http://graph.facebook.com/'+$scope.fbid+'/picture?type=square|width=450|height=450');
+    $scope.save = function() {
+        Devo.setDevo($scope.devo);
     };
+
+    Keypress.onSave(function() {
+        $scope.updatePage();
+    });
+})
+
+.controller('Create2Ctrl', function($scope, $stateParams, $state, Fabric, FabricConstants, Keypress, $timeout, $cordovaCamera, $ionicModal, $http, $q, Devo) {
+    $scope.fabric = {};
+    $scope.FabricConstants = FabricConstants;
+
+    $scope.prev = function() {
+        $state.go('tab.create');
+    }
+
+    $scope.next = function() {
+        $scope.save();
+        $state.go('tab.create3');
+    }
 
     $ionicModal.fromTemplateUrl('templates/modal-bg.html', {
         scope: $scope,
         animation: 'slide-in-up'
     }).then(function(modal) {
         $scope.modal = modal;
+        $scope.modal.show();
     })  
 
     $scope.$on('$destroy', function() {
         $scope.modal.remove();
     });
 
-    $scope.$on('modal.hidden', function() {
-        alert('hidden');
-    });
+    $scope.placeText = function() {
+        $scope.fabric.addCustomText($scope.devo.content, 180, 38);
+        $scope.fabric.addCustomText($scope.devo.verse, 290, 28);
+    };
 
     $scope.actions = {
         selectImage: function() {
@@ -73,8 +82,7 @@ angular.module('starter.controllers', [])
         selectBg: function(imageUrl) {
             $scope.clearCanvas();
             $scope.fabric.addImage(imageUrl).then(function() {
-                $scope.fabric.addCustomText($scope.devo.verse, 130, 10);
-                $scope.fabric.addCustomText($scope.devo.content, 70, 15);
+                $scope.placeText();
             });
             $scope.modal.hide();
         },
@@ -98,8 +106,7 @@ angular.module('starter.controllers', [])
               // var image = document.getElementById('myImage');
               // image.src = "data:image/jpeg;base64," + imageData;
               $scope.fabric.addImage("data:image/jpeg;base64," + imageData).then(function() {
-                $scope.fabric.addCustomText($scope.devo.verse, 130, 10);
-                $scope.fabric.addCustomText($scope.devo.content, 70, 15);
+                $scope.placeText();
               });
             }, function(err) {
               // error
@@ -120,41 +127,13 @@ angular.module('starter.controllers', [])
         $scope.addImage(obj.filename);
     };
 
+    $scope.changeFont = function() {
+        $scope.fabric.deactivateAll();
+    };
+
     $scope.canvas = {
         image: ''
     };
-
-    $scope.save = function() {
-        var devo = {
-            verse: $scope.devo.verse,
-            content: $scope.devo.content,
-            scripture: $scope.devo.scripture,
-            image: $scope
-        };
-
-        $http({
-            url:'http://busintime.id:5001/versy/upload',
-            method:'POST',
-            data:JSON.stringify({file: $scope.fabric.getImageData()}),
-            headers:{'Content-Type':'application/json'}
-        }).success(function (res) {
-            var devo = {
-                verse: $scope.devo.verse,
-                content: $scope.devo.content,
-                scripture: $scope.devo.verse + ' - ' + $scope.devo.content,
-                image: res
-            };
-
-            $http.post('https://versy.firebaseio.com/images/.json', devo).then(function(result) {
-                console.log(result);
-            });
-        })
-        .error(function (reponse) {
-            console.log(response);
-        });
-        
-    };
-
     //
     // Editing Canvas Size
     // ================================================================
@@ -181,30 +160,81 @@ angular.module('starter.controllers', [])
             shapeDefaults: FabricConstants.shapeDefaults,
             json: {}
         });
-        $scope.fabric.addCustomText($scope.devo.verse, 130, 10);
-        $scope.fabric.addCustomText($scope.devo.content, 70, 15);
-        // $scope.addImage().then(function(object) {
-        //     $scope.addShape().then(function(object) {
-        //         $timeout(function() {
-        //             $scope.fabric.addCustomText('Izin Bertakut', 70, 20);
-        //         }, 500);
-        //         $timeout(function() {
-        //             $scope.message = $scope.fabric.addCustomText('Karena '+$scope.name+'\n...', 100, 12);
-        //         }, 600);
-        //     });
-        // });
+
+        $scope.placeText();
     };
 
-    $scope.next = function() {
-        $scope.save();
-        $state.go('tab.create2');
+
+    $scope.load = function() {
+        $scope.devo = Devo.getDevo();
+    };
+    $scope.load();
+
+    $scope.save = function() {
+        $http({
+            url:'http://busintime.id:5001/versy/upload',
+            method:'POST',
+            data:JSON.stringify({file: $scope.fabric.getImageData()}),
+            headers:{'Content-Type':'application/json'}
+        }).success(function (res) {
+            var devo = {
+                verse: $scope.devo.verse,
+                content: $scope.devo.content,
+                scripture: $scope.devo.scripture,
+                image: res,
+                user: 1
+            };
+            $http.post('https://versy.firebaseio.com/images.json', devo).success(function (result) {
+                $scope.devo.id = result.name;
+                Devo.setDevo($scope.devo);
+                $http.put('https://versy.firebaseio.com/users/1/images/'+$scope.devo.id+'.json', $scope.devo).success(function (result) {
+
+                });
+            });
+
+        })
+        .error(function (reponse) {
+            console.log(response);
+        });
     };
 
     $scope.$on('canvas:created', $scope.init);
-
-    Keypress.onSave(function() {
-        $scope.updatePage();
-    });
 })
 
-;
+.controller('Create3Ctrl', function($scope, $stateParams, $state, Fabric, FabricConstants, Keypress, $timeout, $cordovaCamera, $ionicModal, $http, $q, Devo) {
+    $scope.prev = function() {
+        $state.go('tab.create2');
+    }
+
+    $scope.devo = {};
+    $scope.load = function() {
+        $scope.devo = Devo.getDevo();
+    };
+    $scope.load();
+
+    $scope.save = function() {
+        var devo = {
+            scripture: $scope.devo.scripture,
+            observation: $scope.devo.observation,
+            application: $scope.devo.application,
+            prayer: $scope.devo.prayer,
+            user: 1,
+        };
+
+        $http.patch('https://versy.firebaseio.com/images/'+$scope.devo.id+'.json', devo).success(function (result) {
+            console.log(result);
+            $state.go('timeline');
+        });
+    }
+})
+
+.controller('CardCtrl', function($scope, TDCardDelegate) {
+  $scope.cardSwipedLeft = function(index) {
+    console.log('LEFT SWIPE');
+    $scope.addCard();
+  };
+  $scope.cardSwipedRight = function(index) {
+    console.log('RIGHT SWIPE');
+    $scope.addCard();
+  };
+});;
