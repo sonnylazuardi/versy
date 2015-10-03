@@ -83,6 +83,21 @@ angular.module('starter', [
     }
   })
 
+  .state('tab.detail', {
+    url: '/detail/:id',
+    views: {
+      'tab-detail': {
+        templateUrl: 'templates/tab-detail.html',
+        controller: 'DetailCtrl',
+        resolve: {
+          currentAuth: function(Auth) {
+            return Auth.$waitForAuth();
+          }
+        }
+      }
+    }
+  })
+
   .state('tab.browse', {
       url: '/browse',
       views: {

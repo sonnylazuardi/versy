@@ -8,8 +8,7 @@ angular.module('starter.controllers', [])
 .controller('DashCtrl', function($scope) {})
 
 .controller('BrowseCtrl', function($scope) {
-    console.log('hello');
-  var cards = [
+   $scope.cards = [
         { image: 'https://pbs.twimg.com/profile_images/546942133496995840/k7JAxvgq.jpeg' },
         { image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png' },
         { image: 'https://pbs.twimg.com/profile_images/491995398135767040/ie2Z_V6e.jpeg' },
@@ -76,6 +75,35 @@ angular.module('starter.controllers', [])
 .controller('AccountCtrl', function($scope) {
 
 })
+
+
+.controller('DetailCtrl', function($scope, $stateParams,$http,FBURL) {
+    var ref = new Firebase(FBURL+"/images/"+$stateParams.id);
+    ref.on("value", function(snapshot) { //async
+      $scope.devo =snapshot.val();                 
+    }, function (errorObject) {
+      console.log("The read failed: " + errorObject.code);
+    });
+    /*$http({
+            url:'http://versy.firebaseio.com/images/1',
+            method:'GET',
+            headers:{'Content-Type':'application/json'}
+        }).success(function (res) {
+            console.log(res);
+            var devo = {
+                verse: $scope.devo.verse,
+                content: $scope.devo.content,
+                scripture: $scope.devo.scripture,
+                image: res,
+                user: 1
+            };
+
+        })
+        .error(function (reponse) {
+            console.log(response);
+        });*/
+})
+
 
 .controller('CreateCtrl', function($scope, $stateParams, $state, Fabric, FabricConstants, Keypress, $timeout, $cordovaCamera, $ionicModal, $http, $q, Devo) {
     $scope.view = {
