@@ -1,61 +1,61 @@
- <ion-modal-view class="color-picker-modal">
-    <ion-header-bar class="bar">
+ <ion-modal-view class="image-picker-modal">
+    <ion-header-bar class="bar bar-stable">
       <h1 class="title">Choose Image</h1>
     </ion-header-bar>
     <ion-content>
       <div class="row unlimited-items bg-images">
         <div class="col">
           <a href ng-click="actions.captureImage()">
-            <img src="img/bg/cameracapture.jpg" />
+            <img src="img/bg/cameracapture.png" />
           </a>
         </div>
         <div class="col">
-          <a href ng-click="actions.selectBg('img/bg/background.europe.jpg')">
+          <a href ng-click="actions.onSelectBg('img/bg/background.europe.jpg')">
             <img src="img/bg/background.europe.jpg" />
           </a>
         </div>
         <div class="col">
-          <a href ng-click="actions.selectBg('img/bg/background.field.jpg')">
+          <a href ng-click="actions.onSelectBg('img/bg/background.field.jpg')">
             <img src="img/bg/background.field.jpg" />
           </a>
         </div>
         <div class="col">
-          <a href ng-click="actions.selectBg('img/bg/background.forest.jpg')">
+          <a href ng-click="actions.onSelectBg('img/bg/background.forest.jpg')">
             <img src="img/bg/background.forest.jpg" />
           </a>
         </div>
         <div class="col">
-          <a href ng-click="actions.selectBg('img/bg/background.ocean.jpg')">
+          <a href ng-click="actions.onSelectBg('img/bg/background.ocean.jpg')">
             <img src="img/bg/background.ocean.jpg" />
           </a>
         </div>
         <div class="col">
-          <a href ng-click="actions.selectBg('img/bg/background.palmtrees.jpg')">
+          <a href ng-click="actions.onSelectBg('img/bg/background.palmtrees.jpg')">
             <img src="img/bg/background.palmtrees.jpg" />
           </a>
         </div>
         <div class="col">
-          <a href ng-click="actions.selectBg('img/bg/background.pebbles.jpg')">
+          <a href ng-click="actions.onSelectBg('img/bg/background.pebbles.jpg')">
             <img src="img/bg/background.pebbles.jpg" />
           </a>
         </div>
         <div class="col">
-          <a href ng-click="actions.selectBg('img/bg/background.antlers.jpg')">
+          <a href ng-click="actions.onSelectBg('img/bg/background.antlers.jpg')">
             <img src="img/bg/background.antlers.jpg" />
           </a>
         </div>
         <div class="col">
-          <a href ng-click="actions.selectBg('img/bg/background.rain.jpg')">
+          <a href ng-click="actions.onSelectBg('img/bg/background.rain.jpg')">
             <img src="img/bg/background.rain.jpg" />
           </a>
         </div>
         <div class="col">
-          <a href ng-click="actions.selectBg('img/bg/background.trees.jpg')">
+          <a href ng-click="actions.onSelectBg('img/bg/background.trees.jpg')">
             <img src="img/bg/background.trees.jpg" />
           </a>
         </div>
         <div class="col">
-          <a href ng-click="actions.selectBg('img/bg/background.wood.jpg')">
+          <a href ng-click="actions.onSelectBg('img/bg/background.wood.jpg')">
             <img src="img/bg/background.wood.jpg" />
           </a>
         </div>
@@ -64,7 +64,7 @@
       <div>
         <!-- <button class="button button-full" ng-click="actions.captureImage()">Capture from Camera</button> -->
         <button class="button button-full" ng-click="actions.captureLibrary()">Select from Library</button>
-        <button class="button button-full button-dangerous" ng-click="closeModal()">Cancel</button>
+        <button class="button button-full button-dangerous" ng-click="closeModalBg()">Cancel</button>
       </div>
     </ion-content>
 </ion-modal-view>

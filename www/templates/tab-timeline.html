@@ -4,16 +4,20 @@
   The FriendsCtrl pulls data from the Friends service (service.js)
   The Friends service returns an array of friend data
 -->
-<ion-view view-title="My Timeline">
+<ion-view view-title="My Timeline" cache-view="false">
   <ion-content>
     <div class="image-list">
-      <div class="image-item">
-        <img src="http://lorempixel.com/400/400/" alt="">
-      </div>
-      <div class="image-description">
-        <div>
+      <a class="image-item" ng-repeat="timeline in timelines" href="#/tabs/details/{{timeline.id}}">
+        <div href class="image-wrap">
+          <img ng-src="{{timeline.image}}" alt="">
+          <div class="overlay">
+            <div class="stat">
+              <span>0 <i class="icon ion-ios-heart-outline"></i></span>
+              <span>0 <i class="icon ion-ios-chatbubble-outline"></i></span>
+            </div>
+          </div>
         </div>
-      </div>
+      </a>
     </div>
   </ion-content>
 </ion-view>

@@ -1,25 +1,29 @@
 <ion-view view-title="Create a devo">
   <ion-content>
     <div class="list">
+
+      <div class="image">
+        <img ng-src="{{devo.image}}">
+      </div>
       
       <label class="item item-input item-stacked-label">
         <span class="input-label">Scripture</span>
-        <textarea placeholder="content" ng-model="devo.scripture"></textarea>
+        <textarea placeholder="" ng-model="devo.scripture"></textarea>
       </label>
 
       <label class="item item-input item-stacked-label">
         <span class="input-label">Observation</span>
-        <textarea placeholder="content" ng-model="devo.observation"></textarea>
+        <textarea placeholder="How does the Scripture speak to you?" ng-model="devo.observation" rows="3"></textarea>
       </label>
     
-      <label class="item item-input item-stacked-labe l">
+      <label class="item item-input item-stacked-label">
         <span class="input-label">Application</span>
-        <textarea placeholder="content" ng-model="devo.application"></textarea>
+        <textarea placeholder="How will you apply this in your life?" ng-model="devo.application" rows="3"></textarea>
       </label>
 
       <label class="item item-input item-stacked-label">
         <span class="input-label">Prayer</span>
-        <textarea placeholder="content" ng-model="devo.prayer"></textarea>
+        <textarea placeholder="What will be your prayer today?" ng-model="devo.prayer" rows="3"></textarea>
       </label>
       
     </div>

@@ -123,7 +123,6 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
     }
 }
 
-
 .row.unlimited-items {
   flex-wrap: wrap;
 }
@@ -138,6 +137,24 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 }
 
 .row.unlimited-items-search .col{
+  flex: none;
+  width: 100%;
+}
+
+.row.triunlimited-items {
+  flex-wrap: wrap;
+}
+
+.row.triunlimited-items-search {
+  flex-wrap: wrap;
+}
+
+.row.triunlimited-items .col{
+  flex: none;
+  width: 33%;
+}
+
+.row.triunlimited-items-search .col{
   flex: none;
   width: 100%;
 }
@@ -223,4 +240,50 @@ td-card img {
 
 button.button {
     color: #fff !important;
+}
+
+.title {
+    text-indent: -9999px;
+    background: url('../img/icon-small.png') no-repeat;
+    background-position: center 5px;
+    background-size: contain;
+    right: 0 !important;
+    left: 0 !important;
+}
+
+.ion-android-more-vertical {
+  width: 30px;
+  // margin-top: 2px;
+
+}
+
+.image {
+  img {
+    width: 100%;
+  }
+}
+
+.image-list {
+  .image-item {
+    .image-wrap {
+      margin: 10px 15px;
+      position: relative;
+      img {
+        width: 100%;
+      }
+      .overlay {
+        position: absolute;
+        bottom: 5px;
+        padding: 10px 25px;
+        width: 100%;
+        left: 0;
+        text-align: right;
+        color: #fff;
+        font-size: 1.1rem;
+        background: rgba(0,0,0,.7);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0.65))); /* Chrome,Safari4+ */
+        background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%); /* Chrome10+,Safari5.1+ */
+      }
+    }
+  }
 }

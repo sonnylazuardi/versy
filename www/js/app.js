@@ -15,7 +15,7 @@ angular.module('starter', [
   'common.fabric.utilities',
   'common.fabric.constants',
   'ionic.contrib.ui.tinderCards',
-  'ionic-color-picker',
+  // 'ionic-color-picker',
 ])
 
 .constant('FBURL', 'https://versy.firebaseio.com')
@@ -58,7 +58,12 @@ angular.module('starter', [
     views: {
       'tab-create': {
         templateUrl: 'templates/tab-create.html',
-        controller: 'CreateCtrl'
+        controller: 'CreateCtrl',
+        resolve: {
+          currentAuth: function(Auth) {
+            return Auth.$waitForAuth();
+          },
+        },
       }
     }
   })
@@ -68,7 +73,12 @@ angular.module('starter', [
     views: {
       'tab-create': {
         templateUrl: 'templates/tab-create2.html',
-        controller: 'Create2Ctrl'
+        controller: 'Create2Ctrl',
+        resolve: {
+          currentAuth: function(Auth) {
+            return Auth.$waitForAuth();
+          },
+        },
       }
     }
   })
@@ -78,7 +88,12 @@ angular.module('starter', [
     views: {
       'tab-create': {
         templateUrl: 'templates/tab-create3.html',
-        controller: 'Create3Ctrl'
+        controller: 'Create3Ctrl',
+        resolve: {
+          currentAuth: function(Auth) {
+            return Auth.$waitForAuth();
+          },
+        },
       }
     }
   })

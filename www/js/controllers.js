@@ -9,7 +9,7 @@ angular.module('starter.controllers', [])
 
 .controller('BrowseCtrl', function($scope) {
     console.log('hello');
-  var cards = [
+    $scope.cards = [
         { image: 'https://pbs.twimg.com/profile_images/546942133496995840/k7JAxvgq.jpeg' },
         { image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png' },
         { image: 'https://pbs.twimg.com/profile_images/491995398135767040/ie2Z_V6e.jpeg' },
@@ -25,12 +25,13 @@ angular.module('starter.controllers', [])
         console.log("Login Failed!", error);
       } else {
         console.log("Authenticated successfully with payload:", authData);
-        ref.child("users").child(authData.uid).set({
+        ref.child("users").child(authData.uid).update({
             id:authData.uid,
             name: authData.facebook.displayName,
             email: authData.facebook.email,
             avatar: authData.facebook.cachedUserProfile.picture.data.url
         });
+        localStorage.setItem('uid', authData.uid);
         $state.go('tab.create');
       }
     },{
@@ -49,7 +50,7 @@ angular.module('starter.controllers', [])
         console.log(error);
       } else {
         console.log("Successfully created user account with uid:", userData);
-        ref.child("users").child(userData.uid).set({
+        ref.child("users").child(userData.uid).update({
             id:userData.uid,
             email    : email
         });
@@ -62,22 +63,46 @@ angular.module('starter.controllers', [])
             console.log("Login Failed!", error);
           } else {
             console.log("Authenticated successfully with payload:", authData);
-             $state.go('tab.create');
+            localStorage.setItem('uid', authData.uid);
+            $state.go('tab.create');
           }
         });
     });
   }
 })
 
-.controller('TimelineCtrl', function($scope, $stateParams) {
+.controller('TimelineCtrl', function($scope, $stateParams, $state, $q, $http, Auth) {
+    $scope.timelines = [];
+    $scope.auth = Auth;
+    $scope.auth.$onAuth(function(authData) {
+        console.log('https://versy.firebaseio.com/users/'+localStorage.getItem('uid')+'/images/.json');
+        $http.get('https://versy.firebaseio.com/users/'+localStorage.getItem('uid')+'/images/.json')
+            .success(function (result) {
+                var timelines = [];
+                for (var k in result) {
+                    var item = result[k];
+                    item.id = k;
+                    timelines.push(item);
+                }
+                $scope.timelines = timelines;
+            });
+    })
 
+    $scope.load = function() {
+        
+    }
+    $scope.load();
 })
 
 .controller('AccountCtrl', function($scope) {
 
 })
 
-.controller('CreateCtrl', function($scope, $stateParams, $state, Fabric, FabricConstants, Keypress, $timeout, $cordovaCamera, $ionicModal, $http, $q, Devo) {
+.controller('CreateCtrl', function($scope, $stateParams, $state, Fabric, FabricConstants, Keypress, $timeout, $cordovaCamera, $ionicModal, $http, $q, Devo, Auth) {
+    $scope.auth = Auth;
+    $scope.auth.$onAuth(function(authData) {
+        console.log(authData);
+    });
     $scope.view = {
         loading: false
     };
@@ -102,17 +127,24 @@ angular.module('starter.controllers', [])
     });
 })
 
-.controller('Create2Ctrl', function($scope, $stateParams, $state, Fabric, FabricConstants, Keypress, $timeout, $cordovaCamera, $ionicModal, $http, $q, Devo) {
+.controller('Create2Ctrl', function($scope, $stateParams, $state, Fabric, FabricConstants, Keypress, $timeout, $cordovaCamera, $ionicModal, $http, $q, Devo, Auth) {
     $scope.fabric = {};
     $scope.FabricConstants = FabricConstants;
+    $scope.auth = Auth;
+    $scope.auth.$onAuth(function(authData) {
+        $scope.authData = authData;
+        console.log($scope.authData);
+    });
+    $scope.showColor = false;
 
     $scope.prev = function() {
         $state.go('tab.create');
     }
 
     $scope.next = function() {
-        $scope.save();
-        $state.go('tab.create3');
+        $scope.save().then(function() {
+            $state.go('tab.create3');
+        });
     }
 
     $ionicModal.fromTemplateUrl('templates/modal-bg.html', {
@@ -121,27 +153,31 @@ angular.module('starter.controllers', [])
     }).then(function(modal) {
         $scope.modal = modal;
         $scope.modal.show();
-    })  
-
-    $scope.$on('$destroy', function() {
-        $scope.modal.remove();
     });
 
-    $scope.placeText = function() {
-        $scope.fabric.addCustomText($scope.devo.content, 180, 38);
-        $scope.fabric.addCustomText($scope.devo.verse, 290, 28);
-    };
-
     $scope.actions = {
-        selectImage: function() {
+        selectBg: function() {
             $scope.modal.show();
         },
-        selectBg: function(imageUrl) {
+        selectColor: function(id) {
+            $scope.activeColor = id;
+            $scope.showColor = true;
+        },
+        onSelectBg: function(imageUrl) {
             $scope.clearCanvas();
             $scope.fabric.addImage(imageUrl).then(function() {
                 $scope.placeText();
             });
             $scope.modal.hide();
+        },
+        onSelectColor: function(color) {
+            console.log('color: ', color);
+            if ($scope.activeColor == 0) {
+                $scope.fabric.canvasBackgroundColor = color;
+            } else {
+                $scope.fabric.selectedObject.fill = color;
+            }
+            $scope.showColor = false;
         },
         captureImage: function() {
             var options = {
@@ -160,15 +196,21 @@ angular.module('starter.controllers', [])
             $scope.clearCanvas();
 
             $cordovaCamera.getPicture(options).then(function(imageData) {
-              // var image = document.getElementById('myImage');
-              // image.src = "data:image/jpeg;base64," + imageData;
               $scope.fabric.addImage("data:image/jpeg;base64," + imageData).then(function() {
                 $scope.placeText();
               });
             }, function(err) {
-              // error
             });
         },
+    };
+
+    $scope.$on('$destroy', function() {
+        $scope.modal.remove();
+    });
+
+    $scope.placeText = function() {
+        $scope.fabric.addCustomText($scope.devo.content, 180, 38);
+        $scope.fabric.addCustomText($scope.devo.verse, 290, 28);
     };
 
     $scope.closeModal = function() {
@@ -191,9 +233,7 @@ angular.module('starter.controllers', [])
     $scope.canvas = {
         image: ''
     };
-    //
-    // Editing Canvas Size
-    // ================================================================
+
     $scope.selectCanvas = function() {
         $scope.canvasCopy = {
             width: $scope.fabric.canvasOriginalWidth,
@@ -228,6 +268,8 @@ angular.module('starter.controllers', [])
     $scope.load();
 
     $scope.save = function() {
+        var def = $q.defer();
+
         $http({
             url:'http://busintime.id:5001/versy/upload',
             method:'POST',
@@ -239,13 +281,13 @@ angular.module('starter.controllers', [])
                 content: $scope.devo.content,
                 scripture: $scope.devo.scripture,
                 image: res,
-                user: 1
+                user: localStorage.getItem('uid'),
             };
             $http.post('https://versy.firebaseio.com/images.json', devo).success(function (result) {
-                $scope.devo.id = result.name;
-                Devo.setDevo($scope.devo);
-                $http.put('https://versy.firebaseio.com/users/1/images/'+$scope.devo.id+'.json', $scope.devo).success(function (result) {
-
+                devo.id = result.name;
+                Devo.setDevo(devo);
+                $http.put('https://versy.firebaseio.com/users/'+devo.user+'/images/'+devo.id+'.json', devo).success(function (result) {
+                    def.resolve(result);
                 });
             });
 
@@ -253,34 +295,42 @@ angular.module('starter.controllers', [])
         .error(function (reponse) {
             console.log(response);
         });
+
+        return def.promise;
     };
 
     $scope.$on('canvas:created', $scope.init);
 })
 
-.controller('Create3Ctrl', function($scope, $stateParams, $state, Fabric, FabricConstants, Keypress, $timeout, $cordovaCamera, $ionicModal, $http, $q, Devo) {
+.controller('Create3Ctrl', function($scope, $stateParams, $state, Fabric, FabricConstants, Keypress, $timeout, $cordovaCamera, $ionicModal, $http, $q, Devo, Auth) {
     $scope.prev = function() {
         $state.go('tab.create2');
     }
 
+    $scope.auth = Auth;
+    $scope.auth.$onAuth(function(authData) {
+        $scope.auth = authData;
+    });
+
     $scope.devo = {};
     $scope.load = function() {
         $scope.devo = Devo.getDevo();
+        console.log($scope.devo);
     };
     $scope.load();
 
     $scope.save = function() {
         var devo = {
+            id: $scope.devo.id,
             scripture: $scope.devo.scripture,
             observation: $scope.devo.observation,
             application: $scope.devo.application,
             prayer: $scope.devo.prayer,
-            user: 1,
+            user: localStorage.getItem('uid'),
         };
 
-        $http.patch('https://versy.firebaseio.com/images/'+$scope.devo.id+'.json', devo).success(function (result) {
-            console.log(result);
-            $state.go('timeline');
+        $http.patch('https://versy.firebaseio.com/images/'+devo.id+'.json', devo).success(function (result) {
+            $state.go('tab.timeline');
         });
     }
 })
