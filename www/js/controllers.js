@@ -5,26 +5,6 @@ angular.module('starter.controllers', [])
   return $firebaseAuth(ref);
 })
 
-.service('AuthHelper', function() {
-  var self = this;
-  self.getName = function (authData) {
-    if (!authData) return;
-    switch(authData.provider) {
-      case 'facebook':
-        return authData.facebook.displayName;
-    }
-  };
-  self.getPicture = function (authData) {
-    if (!authData) return;
-    switch(authData.provider) {
-      case 'facebook':
-        return authData.facebook.cachedUserProfile.picture.data.url;
-    }
-  }
-  return self;
-})
-
-
 .controller('DashCtrl', function($scope) {})
 
 .controller('BrowseCtrl', function($scope) {
@@ -40,11 +20,47 @@ angular.module('starter.controllers', [])
         console.log("Login Failed!", error);
       } else {
         console.log("Authenticated successfully with payload:", authData);
+        ref.child("users").child(authData.uid).set({
+            id:authData.uid,
+            name: authData.facebook.displayName,
+            email: authData.facebook.email,
+            avatar: authData.facebook.cachedUserProfile.picture.data.url
+        });
+        $state.go('tab.create');
       }
     },{
         scope:"public_profile, email, user_friends"
     });
-    $state.go('tab.create');
+  }
+  $scope.password = function() {
+    var ref = new Firebase("https://versy.firebaseio.com");
+    var email=document.getElementById("email").value;
+    var password=document.getElementById("password").value;
+    ref.createUser({
+      email    : email,
+      password : password
+    }, function(error, userData) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Successfully created user account with uid:", userData);
+        ref.child("users").child(userData.uid).set({
+            id:userData.uid,
+            email    : email
+        });
+      }
+        ref.authWithPassword({
+            email    : email,
+            password : password
+        }, function(error, authData) {
+          if (error) {
+            console.log("Login Failed!", error);
+          } else {
+            console.log("Authenticated successfully with payload:", authData);
+             $state.go('tab.create');
+          }
+        });
+    });
   }
 })
 
