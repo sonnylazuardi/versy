@@ -5,7 +5,16 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
+angular.module('starter', [
+  'ionic', 
+  'starter.controllers', 
+  'starter.services',
+  'ngCordova',
+  'common.fabric',
+  'common.fabric.utilities',
+  'common.fabric.constants',
+  'ionic-color-picker',
+])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -40,46 +49,56 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
   // Each tab has its own nav history stack:
 
-  .state('tab.dash', {
-    url: '/dash',
+  .state('tab.create', {
+    url: '/create',
     views: {
-      'tab-dash': {
-        templateUrl: 'templates/tab-dash.html',
-        controller: 'DashCtrl'
+      'tab-create': {
+        templateUrl: 'templates/tab-create.html',
+        controller: 'CreateCtrl'
       }
     }
   })
 
-  .state('tab.chats', {
-      url: '/chats',
+  .state('tab.create2', {
+    url: '/create',
+    views: {
+      'tab-create': {
+        templateUrl: 'templates/tab-create2.html',
+        controller: 'Create2Ctrl'
+      }
+    }
+  })
+
+  .state('tab.browse', {
+      url: '/browse',
       views: {
-        'tab-chats': {
-          templateUrl: 'templates/tab-chats.html',
-          controller: 'ChatsCtrl'
+        'tab-browse': {
+          templateUrl: 'templates/tab-browse.html',
+          controller: 'BrowseCtrl'
         }
       }
     })
-    .state('tab.chat-detail', {
-      url: '/chats/:chatId',
+    .state('tab.timeline', {
+      url: '/timeline',
       views: {
-        'tab-chats': {
-          templateUrl: 'templates/chat-detail.html',
-          controller: 'ChatDetailCtrl'
+        'tab-timeline': {
+          templateUrl: 'templates/tab-timeline.html',
+          controller: 'TimelineCtrl'
         }
       }
     })
 
-  .state('tab.account', {
-    url: '/account',
+  .state('tab.group', {
+    url: '/group',
     views: {
-      'tab-account': {
-        templateUrl: 'templates/tab-account.html',
-        controller: 'AccountCtrl'
+      'tab-group': {
+        templateUrl: 'templates/tab-group.html',
+        controller: 'GroupCtrl'
       }
     }
   });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/dash');
+  $urlRouterProvider.otherwise('/tab/create');
 
 });

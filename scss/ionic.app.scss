@@ -1,19 +1,5 @@
-/*
-To customize the look and feel of Ionic, you can override the variables
-in ionic's _variables.scss file.
-
-For example, you might change some of the default colors:
-
-$light:                           #fff !default;
-$stable:                          #f8f8f8 !default;
-$positive:                        #387ef5 !default;
-$calm:                            #11c1f3 !default;
-$balanced:                        #33cd5f !default;
-$energized:                       #ffc900 !default;
-$assertive:                       #ef473a !default;
-$royal:                           #886aea !default;
-$dark:                            #444 !default;
-*/
+$stable:                          #6CB6B4 !default;
+$button-light-active-border:      transparent !default;
 
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
@@ -21,3 +7,62 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
 
+.bar.bar-stable {
+    background-color: $stable;
+    background-image: linear-gradient(0deg, #b2b2b2, #b2b2b2 50%, transparent 50%);
+    color: #444;
+    border: none;
+    background-image: none;
+    
+    .title {
+        color: #fff;
+    }
+
+}
+
+.tab-item  {
+    .icon {
+        color: #fff;
+    }
+    .tab-title {
+        color: #fff;
+    }
+}
+
+.tabs-striped .tabs {
+    background: $stable;
+    border-width: 0;
+
+    .tab-item {
+        &.tab-item-active {
+            border-color: #fff !important;
+            border-width: 0px 0px 4px 0px !important;
+        }
+        &.activated {
+            border-color: #fff !important;
+        }
+    }
+}
+
+
+.row.unlimited-items {
+  flex-wrap: wrap;
+}
+
+.row.unlimited-items-search {
+  flex-wrap: wrap;
+}
+
+.row.unlimited-items .col{
+  flex: none;
+  width: 50%;
+}
+
+.row.unlimited-items-search .col{
+  flex: none;
+  width: 100%;
+}
+
+.bg-images img{
+    max-width: 100%;
+}

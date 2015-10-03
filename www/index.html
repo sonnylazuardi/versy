@@ -7,6 +7,7 @@
 
     <link href="css/ionic.app.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/editor.css">
 
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     <link href="css/ionic.app.css" rel="stylesheet">
@@ -16,13 +17,28 @@
     <script src="lib/ionic/js/ionic.bundle.js"></script>
 
     <!-- cordova script (this will be a 404 during development) -->
+    <script src="js/ng-cordova.min.js"></script>
     <script src="cordova.js"></script>
 
     <!-- your app's js -->
+    <script src="js/jquery.min.js"></script>
+
     <script src="js/app.js"></script>
     <script src="js/controllers.js"></script>
     <script src="js/services.js"></script>
-    
+
+    <script src="js/fabric/fabric.min.js"></script>
+    <script src="js/fabric/fabric.js"></script>
+    <script src="js/fabric/fabricCanvas.js"></script>
+    <script src="js/fabric/fabricConstants.js"></script>
+    <script src="js/fabric/fabricDirective.js"></script>
+    <script src="js/fabric/fabricDirtyStatus.js"></script>
+    <script src="js/fabric/fabricUtilities.js"></script>
+    <script src="js/fabric/fabricWindow.js"></script>
+
+    <script src="js/fabric/canvas2image.js"></script>
+    <script src="js/ionic-color-picker-tinycolor.min.js"></script>
+
   </head>
   <body ng-app="starter">
     <!--
