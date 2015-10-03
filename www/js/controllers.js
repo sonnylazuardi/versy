@@ -1,5 +1,10 @@
 angular.module('starter.controllers', [])
 
+.factory("Auth", function($firebaseAuth, FBURL) {
+  var ref = new Firebase(FBURL);
+  return $firebaseAuth(ref);
+})
+
 .controller('DashCtrl', function($scope) {})
 
 .controller('BrowseCtrl', function($scope) {
@@ -10,6 +15,58 @@ angular.module('starter.controllers', [])
         { image: 'https://pbs.twimg.com/profile_images/491995398135767040/ie2Z_V6e.jpeg' },
     ];
 
+})
+
+.controller('LoginCtrl', function($scope, $state,FBURL) {
+  $scope.facebook = function() {
+    var ref = new Firebase(FBURL);
+    ref.authWithOAuthPopup("facebook", function(error, authData) {
+      if (error) {
+        console.log("Login Failed!", error);
+      } else {
+        console.log("Authenticated successfully with payload:", authData);
+        ref.child("users").child(authData.uid).set({
+            id:authData.uid,
+            name: authData.facebook.displayName,
+            email: authData.facebook.email,
+            avatar: authData.facebook.cachedUserProfile.picture.data.url
+        });
+        $state.go('tab.create');
+      }
+    },{
+        scope:"public_profile, email, user_friends"
+    });
+  }
+  $scope.password = function() {
+    var ref = new Firebase("https://versy.firebaseio.com");
+    var email=document.getElementById("email").value;
+    var password=document.getElementById("password").value;
+    ref.createUser({
+      email    : email,
+      password : password
+    }, function(error, userData) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Successfully created user account with uid:", userData);
+        ref.child("users").child(userData.uid).set({
+            id:userData.uid,
+            email    : email
+        });
+      }
+        ref.authWithPassword({
+            email    : email,
+            password : password
+        }, function(error, authData) {
+          if (error) {
+            console.log("Login Failed!", error);
+          } else {
+            console.log("Authenticated successfully with payload:", authData);
+             $state.go('tab.create');
+          }
+        });
+    });
+  }
 })
 
 .controller('TimelineCtrl', function($scope, $stateParams) {

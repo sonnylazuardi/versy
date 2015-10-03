@@ -6,6 +6,7 @@
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', [
+  'firebase',
   'ionic', 
   'starter.controllers', 
   'starter.services',
@@ -16,6 +17,8 @@ angular.module('starter', [
   'ionic.contrib.ui.tinderCards',
   'ionic-color-picker',
 ])
+
+.constant('FBURL', 'https://versy.firebaseio.com')
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -85,7 +88,12 @@ angular.module('starter', [
       views: {
         'tab-browse': {
           templateUrl: 'templates/tab-browse.html',
-          controller: 'BrowseCtrl'
+          controller: 'BrowseCtrl',
+          resolve: {
+            currentAuth: function(Auth) {
+              return Auth.$waitForAuth();
+            },
+          },
         }
       }
     })
@@ -94,10 +102,21 @@ angular.module('starter', [
       views: {
         'tab-timeline': {
           templateUrl: 'templates/tab-timeline.html',
-          controller: 'TimelineCtrl'
+          controller: 'TimelineCtrl',
+          resolve: {
+            currentAuth: function(Auth) {
+              return Auth.$waitForAuth();
+            },
+          },
         }
       }
     })
+  
+  .state('login', {
+    url: "/login",
+    templateUrl: "templates/login.html",
+    controller: 'LoginCtrl'
+  })
 
   .state('tab.group', {
     url: '/group',
@@ -110,6 +129,6 @@ angular.module('starter', [
   });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/create');
+  $urlRouterProvider.otherwise('/login');
 
 });
