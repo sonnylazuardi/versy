@@ -5,15 +5,50 @@ angular.module('starter.controllers', [])
   return $firebaseAuth(ref);
 })
 
+.controller('AppCtrl', function($scope, $ionicPopover, Auth, $state) {
+
+    $ionicPopover.fromTemplateUrl('templates/popover.html', {
+        scope: $scope,
+    }).then(function(popover) {
+        $scope.popover = popover;
+    });
+
+    $scope.auth = Auth;
+
+    $scope.logout = function() {
+        $scope.auth.$unauth();
+    }
+
+    $scope.auth.$onAuth(function(authData) {
+        if (authData) {
+          $scope.authData = authData;
+        } else {
+          $state.go('login');
+        }
+    });
+
+})
+
 .controller('DashCtrl', function($scope) {})
 
-.controller('BrowseCtrl', function($scope) {
-    console.log('hello');
-    $scope.cards = [
-        { image: 'https://pbs.twimg.com/profile_images/546942133496995840/k7JAxvgq.jpeg' },
-        { image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png' },
-        { image: 'https://pbs.twimg.com/profile_images/491995398135767040/ie2Z_V6e.jpeg' },
-    ];
+.controller('BrowseCtrl', function($scope, FBURL, $http, $state) {
+    $scope.changeRoute = function(id) {
+        $state.go('tab.detail', {id: id});
+    }
+    $scope.load = function() {
+        $http.get('https://versy.firebaseio.com/images.json')
+            .success(function (result) {
+                var images = [];
+                for (var k in result) {
+                    if (!result[k]) continue;
+                    var item = result[k];
+                    item.id = k;
+                    images.push(item);
+                }
+                $scope.images = images;
+            });
+    }
+    $scope.load();
 
 })
 
@@ -24,6 +59,7 @@ angular.module('starter.controllers', [])
       if (error) {
         console.log("Login Failed!", error);
       } else {
+        localStorage.setItem("authData",JSON.stringify(authData));
         console.log("Authenticated successfully with payload:", authData);
         ref.child("users").child(authData.uid).update({
             id:authData.uid,
@@ -32,7 +68,7 @@ angular.module('starter.controllers', [])
             avatar: authData.facebook.cachedUserProfile.picture.data.url
         });
         localStorage.setItem('uid', authData.uid);
-        $state.go('tab.create');
+        $state.go('tab.timeline');
       }
     },{
         scope:"public_profile, email, user_friends"
@@ -62,9 +98,10 @@ angular.module('starter.controllers', [])
           if (error) {
             console.log("Login Failed!", error);
           } else {
+            localStorage.setItem("authData",JSON.stringify(authData));
             console.log("Authenticated successfully with payload:", authData);
             localStorage.setItem('uid', authData.uid);
-            $state.go('tab.create');
+            $state.go('tab.timeline');
           }
         });
     });
@@ -73,6 +110,7 @@ angular.module('starter.controllers', [])
 
 .controller('TimelineCtrl', function($scope, $stateParams, $state, $q, $http, Auth) {
     $scope.timelines = [];
+    $scope.empty = true;
     $scope.auth = Auth;
     $scope.auth.$onAuth(function(authData) {
         console.log('https://versy.firebaseio.com/users/'+localStorage.getItem('uid')+'/images/.json');
@@ -80,11 +118,14 @@ angular.module('starter.controllers', [])
             .success(function (result) {
                 var timelines = [];
                 for (var k in result) {
+                    if (!result[k]) continue;
                     var item = result[k];
                     item.id = k;
                     timelines.push(item);
                 }
                 $scope.timelines = timelines;
+                if (timelines.length > 0) $scope.empty = false; else $scope.empty = true;
+                // $scope.empty = false;
             });
     })
 
@@ -98,11 +139,55 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('CreateCtrl', function($scope, $stateParams, $state, Fabric, FabricConstants, Keypress, $timeout, $cordovaCamera, $ionicModal, $http, $q, Devo, Auth) {
-    $scope.auth = Auth;
-    $scope.auth.$onAuth(function(authData) {
-        console.log(authData);
-    });
+
+.controller('DetailCtrl', function($scope, $stateParams, $http, FBURL, $q) {
+
+    $scope.load = function() {
+        $http.get('https://versy.firebaseio.com/images/'+$stateParams.id+'.json')
+            .success(function (result) {
+                $scope.devo = result;
+                $scope.devo.id = $stateParams.id;
+            });
+    };
+    $scope.load();
+    
+    $scope.comment = function(cText, image_id) {
+        var defer = $q.defer();
+        var authData = JSON.parse(localStorage.getItem("authData"));
+        var comment = {
+                text: cText,
+         };
+         console.log(authData.provider);
+         if (authData.provider=="facebook"){
+            comment.user_name=authData.facebook.displayName;
+            comment.user_pp=authData.facebook.cachedUserProfile.picture.data.url;
+         }
+         else{
+            comment.user_name=authData.password.email;
+            comment.user_pp="img/nopp.png";
+         }
+         $http.post("https://versy.firebaseio.com/images/"+image_id+"/comments.json", comment)
+            .success(function (res) {
+                defer.resolve(res);
+            });
+
+        return defer.promise;
+    };
+
+    $scope.prayer = {
+        message: '',
+        submitPrayer: function() {
+            $scope.comment($scope.prayer.message, $scope.devo.id).then(function() {
+                $scope.prayer.message = '';
+                $scope.load();
+            });
+            return false;
+        },
+    };
+})
+
+
+.controller('CreateCtrl', function($scope, $stateParams, $state, Fabric, FabricConstants, Keypress, $timeout, $cordovaCamera, $ionicModal, $http, $q, Devo) {
     $scope.view = {
         loading: false
     };
@@ -276,12 +361,23 @@ angular.module('starter.controllers', [])
             data:JSON.stringify({file: $scope.fabric.getImageData()}),
             headers:{'Content-Type':'application/json'}
         }).success(function (res) {
+            var authData = JSON.parse(localStorage.getItem("authData"));
+            if (authData.provider=="facebook"){
+                authData.user_name=authData.facebook.displayName;
+                authData.user_pp=authData.facebook.cachedUserProfile.picture.data.url;
+            }
+            else{
+                authData.user_name=authData.password.email;
+                authData.user_pp="img/nopp.png";
+            }
             var devo = {
                 verse: $scope.devo.verse,
                 content: $scope.devo.content,
                 scripture: $scope.devo.scripture,
                 image: res,
                 user: localStorage.getItem('uid'),
+                user_name: authData.user_name,
+                user_pp: authData.user_pp,
             };
             $http.post('https://versy.firebaseio.com/images.json', devo).success(function (result) {
                 devo.id = result.name;
@@ -320,13 +416,13 @@ angular.module('starter.controllers', [])
     $scope.load();
 
     $scope.save = function() {
+        
         var devo = {
             id: $scope.devo.id,
             scripture: $scope.devo.scripture,
             observation: $scope.devo.observation,
             application: $scope.devo.application,
             prayer: $scope.devo.prayer,
-            user: localStorage.getItem('uid'),
         };
 
         $http.patch('https://versy.firebaseio.com/images/'+devo.id+'.json', devo).success(function (result) {

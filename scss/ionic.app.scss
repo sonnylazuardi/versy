@@ -238,7 +238,7 @@ td-card img {
   opacity: 0;
 }
 
-button.button {
+.button {
     color: #fff !important;
 }
 
@@ -260,6 +260,7 @@ button.button {
 .image {
   img {
     width: 100%;
+    min-height: 345px;
   }
 }
 
@@ -270,6 +271,7 @@ button.button {
       position: relative;
       img {
         width: 100%;
+        min-height: 345px;
       }
       .overlay {
         position: absolute;
@@ -285,5 +287,101 @@ button.button {
         background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%); /* Chrome10+,Safari5.1+ */
       }
     }
+  }
+}
+
+.devotionals {
+  h2 {
+    padding: 0 20px;
+    font-weight: 100;
+    margin-top: 20px;
+    text-align: center;
+  }
+  p {
+    padding: 0 20px;
+    text-align: justify;
+  }
+  .devo-wrap {
+    margin: 20px 0;
+    margin-bottom: 30px;
+  }
+}
+
+.td-wrap {
+  position: absolute;
+  top: 450px;
+  left: 0;
+  .td-button {
+    
+    text-align: center;
+    color: #fff;
+    i {
+      font-size: 2rem;
+    }
+    .td-button-love { 
+      width: 60px;
+      height: 60px;
+      padding: 15px;
+      background: #888;
+      border-radius: 50%;
+      margin: 0 auto;
+    }
+    .td-button-next {
+      width: 60px;
+      height: 60px;
+      padding: 15px;
+      background: #888;
+      border-radius: 50%;
+      margin: 0 auto;
+    }
+    .td-button-share {
+      width: 32px;
+      height: 32px;
+      background: #888;
+      border-radius: 50%;
+      margin: 0 auto;
+      padding: 5px;
+      i {
+        font-size: 1.3rem;
+      }
+    }
+
+    .td-button-download {
+      width: 32px;
+      height: 32px;
+      background: #888;
+      border-radius: 50%;
+      margin: 0 auto;
+      padding: 5px;
+      i {
+        font-size: 1.3rem;
+      }
+    }
+  }
+}
+
+.list-empty {
+  text-align: center;
+  margin-top: 150px;
+
+  i {
+    font-size: 5em;
+    color: #888;
+  }
+}
+
+.image-author {
+  height: 40px;
+  background: #fff;
+  padding: 5px;
+  img {
+    width: 32px;
+    height: 32px;
+    float: left;
+  }
+  span {
+    height: 32px;
+    float: left;
+    margin: 5px 0 0 5px;
   }
 }

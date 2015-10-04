@@ -1,0 +1,44 @@
+<ion-view view-title="Detail" cache-view="false">
+  <ion-content>
+    <div class="image">
+      <img ng-src="{{devo.image}}" alt="">
+    </div>
+    <div class="devotionals">
+      <div class="devo-wrap" ng-if="devo.scripture"> 
+        <h2>Scripture</h2>
+        <p>{{devo.scripture}}</p>
+      </div>
+        
+      <div class="devo-wrap" ng-if="devo.observation"> 
+        <h2>Observation</h2>
+        <p>{{devo.observation}}</p>
+      </div>
+      
+      <div class="devo-wrap" ng-if="devo.application"> 
+        <h2>Application</h2>
+        <p>{{devo.application}}</p>
+      </div>
+
+      <div class="devo-wrap" ng-if="devo.prayer"> 
+        <h2>Prayer</h2>
+        <p>{{devo.prayer}}</p>
+      </div>
+    </div>
+    <div class="list">
+      <a class="item item-avatar" href ng-repeat="comment in devo.comments">
+        <img ng-src="{{comment.user_pp}}">
+        <h2>{{comment.user_name}}</h2>
+        <p>{{comment.text}}</p>
+      </a>
+      <form ng-submit="prayer.submitPrayer()">
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">Add Comment</span>
+          <textarea placeholder="Your prayer to this person" ng-model="prayer.message" rows="3"></textarea>
+        </label>
+        <div class="row">
+          <button type="submit" class="button button-stable button-full">Send</button>
+        </div>
+      </form>
+    </div>
+  </ion-content>
+</ion-view>

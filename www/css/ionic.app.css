@@ -9462,7 +9462,7 @@ td-card img {
   transition: 0.2s opacity linear;
   opacity: 0; }
 
-button.button {
+.button {
   color: #fff !important; }
 
 .title {
@@ -9477,13 +9477,15 @@ button.button {
   width: 30px; }
 
 .image img {
-  width: 100%; }
+  width: 100%;
+  min-height: 345px; }
 
 .image-list .image-item .image-wrap {
   margin: 10px 15px;
   position: relative; }
   .image-list .image-item .image-wrap img {
-    width: 100%; }
+    width: 100%;
+    min-height: 345px; }
   .image-list .image-item .image-wrap .overlay {
     position: absolute;
     bottom: 5px;
@@ -9498,3 +9500,79 @@ button.button {
     /* Chrome,Safari4+ */
     background: -webkit-linear-gradient(top, transparent 0%, rgba(0, 0, 0, 0.65) 100%);
     /* Chrome10+,Safari5.1+ */ }
+
+.devotionals h2 {
+  padding: 0 20px;
+  font-weight: 100;
+  margin-top: 20px;
+  text-align: center; }
+
+.devotionals p {
+  padding: 0 20px;
+  text-align: justify; }
+
+.devotionals .devo-wrap {
+  margin: 20px 0;
+  margin-bottom: 30px; }
+
+.td-wrap {
+  position: absolute;
+  top: 450px;
+  left: 0; }
+  .td-wrap .td-button {
+    text-align: center;
+    color: #fff; }
+    .td-wrap .td-button i {
+      font-size: 2rem; }
+    .td-wrap .td-button .td-button-love {
+      width: 60px;
+      height: 60px;
+      padding: 15px;
+      background: #888;
+      border-radius: 50%;
+      margin: 0 auto; }
+    .td-wrap .td-button .td-button-next {
+      width: 60px;
+      height: 60px;
+      padding: 15px;
+      background: #888;
+      border-radius: 50%;
+      margin: 0 auto; }
+    .td-wrap .td-button .td-button-share {
+      width: 32px;
+      height: 32px;
+      background: #888;
+      border-radius: 50%;
+      margin: 0 auto;
+      padding: 5px; }
+      .td-wrap .td-button .td-button-share i {
+        font-size: 1.3rem; }
+    .td-wrap .td-button .td-button-download {
+      width: 32px;
+      height: 32px;
+      background: #888;
+      border-radius: 50%;
+      margin: 0 auto;
+      padding: 5px; }
+      .td-wrap .td-button .td-button-download i {
+        font-size: 1.3rem; }
+
+.list-empty {
+  text-align: center;
+  margin-top: 150px; }
+  .list-empty i {
+    font-size: 5em;
+    color: #888; }
+
+.image-author {
+  height: 40px;
+  background: #fff;
+  padding: 5px; }
+  .image-author img {
+    width: 32px;
+    height: 32px;
+    float: left; }
+  .image-author span {
+    height: 32px;
+    float: left;
+    margin: 5px 0 0 5px; }

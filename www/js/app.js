@@ -60,10 +60,10 @@ angular.module('starter', [
         templateUrl: 'templates/tab-create.html',
         controller: 'CreateCtrl',
         resolve: {
-          currentAuth: function(Auth) {
-            return Auth.$waitForAuth();
+            currentAuth: function(Auth) {
+              return Auth.$waitForAuth();
+            },
           },
-        },
       }
     }
   })
@@ -94,6 +94,21 @@ angular.module('starter', [
             return Auth.$waitForAuth();
           },
         },
+      }
+    }
+  })
+
+  .state('tab.detail', {
+    url: '/detail/:id',
+    views: {
+      'tab-timeline': {
+        templateUrl: 'templates/tab-detail.html',
+        controller: 'DetailCtrl',
+        resolve: {
+          currentAuth: function(Auth) {
+            return Auth.$waitForAuth();
+          }
+        }
       }
     }
   })
@@ -144,6 +159,6 @@ angular.module('starter', [
   });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/login');
+  $urlRouterProvider.otherwise('/tab/timeline');
 
 });
