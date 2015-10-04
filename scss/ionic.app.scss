@@ -195,7 +195,7 @@ td-cards {
 td-card {
   position: absolute;
   left: 50%;
-  margin-top: 80px;
+  margin-top: 20px;
   margin-bottom: 40px;
   margin-left: -150px;
   width: 300px;
@@ -309,8 +309,9 @@ td-card img {
 
 .td-wrap {
   position: absolute;
-  top: 450px;
+  top: 390px;
   left: 0;
+
   .td-button {
     
     text-align: center;
@@ -389,3 +390,32 @@ td-card img {
 .popover { 
   height:60px;
    }
+
+.full-picture {
+  background: url('../img/bg.jpg') no-repeat;
+  background-size: cover;
+  background-position: center center;
+  color: #fff;
+
+  .logo {
+    background: url('../img/logo.png') no-repeat;
+    margin: 40px auto;
+    height: 200px;
+    background-size: contain;
+    background-position: center center;
+    
+  }
+}
+
+.button-custom {
+  i {
+    margin-right: 10px;
+  }
+}
+
+.list-login {
+  .item-input {
+    background: rgba(255,255,255,.4);
+    color: #fff;
+  }
+}
