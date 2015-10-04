@@ -192,12 +192,24 @@ angular.module('starter.controllers', [])
         loading: false
     };
     $scope.devo = {
-        verse: 'Psalm 19:1',
-        font: 'Lobster',
-        content: 'The heavens declare \n the glory of God',
-        scripture: 'Psalm 19:1 - The heavens declare the glory of God; and the firmament sheweth his handywork.',
+        verse: '',
+        font: '',
+        content: '',
+        scripture: '',
     };
-
+    $scope.search= function(){
+        var pattern=new RegExp("(1|2)? *[\\w\\-]+ +[0-9]+ *: *[0-9]+");
+        if (pattern.exec($scope.devo.verse)!=null){
+            $http.get('http://labs.bible.org/api/?passage='+$scope.devo.verse+'&formatting=plain&type=json').success(function (result) {
+                $scope.devo.content=result[0].text;
+                $scope.devo.scripture=$scope.devo.verse+" - "+$scope.devo.content;
+            });
+        }
+        else{
+            $scope.devo.content="";
+            $scope.devo.scripture="";
+        }
+    };
     $scope.next = function() {
         $scope.save();
         $state.go('tab.create2');
