@@ -9576,3 +9576,6 @@ td-card img {
     height: 32px;
     float: left;
     margin: 5px 0 0 5px; }
+
+.popover {
+  height: 60px; }
